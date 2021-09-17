@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 
 class SclassController extends Controller
 {
@@ -37,7 +38,16 @@ class SclassController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validateData = $request->validate([
+            'class_name' => 'required|unique:sclasses|max:25'
+        ]);
+
+        $insert = DB::table('sclasses')->insert([
+            'class_name' => $request->class_name,
+            'created_at' => Carbon::now(),
+        ]);
+
+        return response('Inserted Successfully!');
     }
 
     /**
