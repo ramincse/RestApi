@@ -40,6 +40,7 @@ class SubjectController extends Controller
         $request->validate([
             'class_id'      => 'required',
             'subject_name'  => 'required|unique:subjects|max:25',
+            'subject_code'  => 'required|unique:subjects|max:25',
         ]);
 
         Subject::create([
@@ -59,7 +60,8 @@ class SubjectController extends Controller
      */
     public function show($id)
     {
-        //
+        $show = Subject::findOrFail($id);
+        return response()->json($show);
     }
 
     /**
@@ -82,7 +84,20 @@ class SubjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $subject = Subject::findOrFail($id);
+
+        $request->validate([
+            'class_id'      => 'required',
+            'subject_name'  => 'required',
+            'subject_code'  => 'required',
+        ]);
+
+        $subject->class_id      = $request->class_id;
+        $subject->subject_name  = $request->subject_name;
+        $subject->subject_code  = $request->subject_code;
+        $subject->update();
+
+        return response('Subject Updated Successfully!');
     }
 
     /**
@@ -93,6 +108,7 @@ class SubjectController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Subject::where('id', $id)->delete();
+        return response('Subject Data Deleted Successfully!');
     }
 }
