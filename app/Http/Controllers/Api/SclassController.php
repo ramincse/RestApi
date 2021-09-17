@@ -58,7 +58,9 @@ class SclassController extends Controller
      */
     public function show($id)
     {
-        //
+        //Show Specific Sclass Data
+        $show = DB::table('sclasses')->where('id', $id)->first();
+        return response()->json($show);
     }
 
     /**
@@ -81,7 +83,17 @@ class SclassController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //Specific Sclass Data Update
+        $validateData = $request->validate([
+            'class_name' => 'required|unique:sclasses|max:25'
+        ]);
+
+        DB::table('sclasses')->where('id', $id)->update([
+            'class_name' => $request->class_name,
+            'updated_at' => Carbon::now(),
+        ]);
+
+        return response('Sclass Data Updated Successfully!');
     }
 
     /**
@@ -92,6 +104,8 @@ class SclassController extends Controller
      */
     public function destroy($id)
     {
-        //
+        //Delete Sclass Data
+        DB::table('sclasses')->where('id', $id)->delete();
+        return response('Sclass Data Deleted Successfully!');
     }
 }
